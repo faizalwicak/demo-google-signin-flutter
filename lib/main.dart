@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 void main() {
@@ -125,16 +126,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
           GoogleSignIn googleSignIn = GoogleSignIn(
             // Optional clientId
-            clientId:
-                '1076321015330-7kkkb7o3uhl36013njpeh4qe7qr6vu48.apps.googleusercontent.com',
+            // clientId: '',
             scopes: scopes,
           );
 
           try {
-            await googleSignIn.signIn();
-            print('success');
+            var account = await googleSignIn.signIn();
+            if (account != null) {
+              var auth = await account.authentication;
+              print(auth.accessToken);
+            }
+          } on PlatformException catch (error) {
+            print(error);
           } catch (error) {
-            print('asdf error');
             print(error);
           }
         },
